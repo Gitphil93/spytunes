@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+
+* {
+  font-family: 'Righteous', cursive;
+  letter-spacing: 4px;
+  font-weight: bold;
+  
+}
+
+body {
+  background: rgb(243, 243, 243);
+  margin: 0;
+  height: 100vh;
+  display: flex;
+}
+
+header {
+  padding: 1rem;
+}
+
+h1,h2,h3,h4,h5,p,a {
+    color: rgb(77, 43, 43) !important; 
+    margin: 4px;
+}
+
+.main {
+
+  width: 100%;
+  height: 100%;
+}
+
+#map {
+  height: 80%;
+  width: 80%;
+  margin: auto;
+  box-shadow: 0 0 3rem rgba(0, 0, 0, 0.2);
+  text-align: center;
+  justify-content: center;
+  display: block; /* set to block-level element */
+}
+
+#position-button {
+  text-align: center;
+  justify-content: center;
+  height: 3rem;
+  width: 12rem;
+}
+
+.header {
+  text-align: center;
+}
+
+.marker {
+    background-image: url('./assets/headphones-icon.svg');
+   /*  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.2); */
+   /*  background-color: rgb(77, 43, 43); */
+    color: white;
+    font-weight: 100;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .mapboxgl-popup {
+      display:flex !important;
+   border: 5px  rgb(77, 43, 43);
+    color: rgb(0, 0, 0);
+    border-radius: 10px;
+      width: 250px;
+      height: 200px;
+  }
+  
+  .mapboxgl-popup-content {
+  
+    text-align: center;
+    height: auto;
+ 
+  }
+  .mapboxgl-popup-tip {
+    border-top-color:  rgb(77, 43, 43)!important;
+  } 
