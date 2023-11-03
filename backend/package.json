@@ -1,0 +1,23 @@
+{
+  "name": "spytunes",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mapbox-gl": "^2.15.0",
+    "nedb": "^1.8.0",
+    "nedb-promise": "^2.0.1",
+    "node-fetch": "^3.3.2",
+    "spotify-web-api-node": "^5.0.2"
+  },
+  "description": ""
+}

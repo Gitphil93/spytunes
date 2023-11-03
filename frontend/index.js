@@ -2,6 +2,11 @@
 const API_TOKEN = 'pk.eyJ1IjoibWFwLXBoaWwiLCJhIjoiY2xncDJma3RoMGF1ajNmc3V2NnhoZ21reCJ9.q61tna0GR6GFleO2otlW2g';
 
 const buttonElem = document.querySelector('#position-button');
+const spotifyAuthButton = document.querySelector('#spotify-auth-button')
+
+spotifyAuthButton.addEventListener('click', () => {
+  window.location.href = '/login';
+})
 
 function showOnMap(position, artistData, personalData) {
     mapboxgl.accessToken = API_TOKEN;
