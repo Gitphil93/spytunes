@@ -1,12 +1,33 @@
 
 const API_TOKEN = 'pk.eyJ1IjoibWFwLXBoaWwiLCJhIjoiY2xncDJma3RoMGF1ajNmc3V2NnhoZ21reCJ9.q61tna0GR6GFleO2otlW2g';
-
 const buttonElem = document.querySelector('#position-button');
-const spotifyAuthButton = document.querySelector('#spotify-auth-button')
+const profileButton = document.querySelector('.profile-container')
+const profilePic = document.querySelector('#profile')
+//const logoutButton = document.querySelector('#logout-button')
+const menuProfilePic = document.querySelector('#profile-card-pic')
+const menuProfileName = document.querySelector('#profile-card-name')
+const menu = document.querySelector('.popup-menu')
 
-spotifyAuthButton.addEventListener('click', () => {
-  window.location.href = '/login';
-})
+let isActive = false
+
+
+
+profileButton.addEventListener('click', async () => {
+  isActive = !isActive;
+  console.log(isActive);
+  if (isActive) {
+    setTimeout(() => { menu.style.display = 'block';
+  }, 30)
+   
+    menu.style.transform = 'scale(1)'; 
+  } else {
+    menu.style.transform = 'scale(0.9)'; 
+    setTimeout(() => {
+      menu.style.display = 'none';
+    }, 30); 
+  }
+});
+
 
 function showOnMap(position, artistData, personalData) {
     mapboxgl.accessToken = API_TOKEN;
@@ -16,7 +37,10 @@ function showOnMap(position, artistData, personalData) {
       center: [position.coords.longitude, position.coords.latitude],
       zoom: 15
     });
-  
+    profilePic.src = personalData.images[0].url
+    menuProfilePic.src = personalData.images[0].url
+    menuProfileName.innerHTML = personalData.display_name
+    profilePic.src = personalData.images[0].url
     const el = document.createElement('div');
     el.className = 'marker';
   
@@ -50,7 +74,10 @@ function showOnMap(position, artistData, personalData) {
       });
     }
   }
-
+  
+  function showMenu() {
+   
+  }
 
 
 

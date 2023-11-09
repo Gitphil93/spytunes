@@ -14,14 +14,30 @@
     <div class="main">
       <header class="header">
         <h1>spytunes</h1>
-        <button id="spotify-auth-button">Authorize Spotify</button>
+        <div class="profile-container">
+          <img src="./assets/hamburger-menu.png" id="hamburger"/>
+        <img id="profile"/>
+      </div>
+        <div class="popup-menu">
+        <div class="profile-card">
+          <img id="profile-card-pic"/>
+          <h3 id="profile-card-name"></h3>
+        </div>
+        <div id="profile-options">
+
+          <a>Profile</a>
+          <a>Friends</a>
+          <a>Search</a>
+          <a>Log out</a>
+
+        </div>
+      </div>
+      
+      
         <p id="playing"></p>
       </header>
 
-      <div id="map">
-
-       
-      </div>
+      <div id="map"></div>
     </div>
     
   </body>

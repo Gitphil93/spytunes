@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+
+* {
+  font-family: 'Righteous', cursive;
+  letter-spacing: 4px;
+  font-weight: bold;
+  
+}
+
+
+.wrapper {
+    text-align: center;
+}
+
+h1,h2,h3,h4,h5,p,a {
+    color: rgb(77, 43, 43) !important; 
+}
+
+#profile-picture {
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+}
+
+

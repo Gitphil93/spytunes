@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+
+
+* {
+  font-family: 'Righteous', cursive;
+  letter-spacing: 4px;
+  font-weight: bold;
+}
+
+ 
+
+body {
+  background: rgb(243, 243, 243);
+}
+
+ 
+
+h1,h2,h3,h4,h5,p,a {
+    color: rgb(77, 43, 43) !important;
+}
+
+ 
+
+.main {
+    text-align: center;
+}
+
+ 
+
+.login-wrapper {
+    position: relative;
+    width: 400px;
+    height: 600px;
+   /*  box-shadow: 1px 1px 10px 2px white; */
+    border-radius: 16px;
+    margin:auto;
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+ 
+
+input {
+    width: 80%;
+    height: 2.5rem;
+    margin-top: 1rem;
+    text-align: center;
+    outline: none;
+    font-size: 1rem;
+}
+
+ 
+
+/* .input-wrapper {
+    margin-top: 5rem;
+} */
+
+ 
+
+.button-wrapper{
+    margin-top: 10rem;
+}
+
+ 
+
+button {
+    width: 80%;
+    height: 2.5rem;
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+}
+
+ 
+
+button:hover {
+    cursor: pointer;
+}
