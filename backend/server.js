@@ -39,7 +39,7 @@ const scopes = [
 var spotifyApi = new SpotifyWebApi({
     clientId: 'f8f1713b777347b98ca3934762b892b9',
     clientSecret: 'c1dfd3d453094ba19004b82174a9f9fe',
-    redirectUri: 'http://localhost:3000/callback'
+    redirectUri: 'https://spytunes-backend-7bb58376fee2.herokuapp.com/callback'
   });
 
 
@@ -85,7 +85,7 @@ var spotifyApi = new SpotifyWebApi({
           `Sucessfully retreived access token. Expires in ${expires_in} s.`
         );
 
-        res.redirect('/');
+        res.redirect('https://spytunes-backend-7bb58376fee2.herokuapp.com/');
 
         setInterval(async () => {
           const data = await spotifyApi.refreshAccessToken();
