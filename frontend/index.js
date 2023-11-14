@@ -11,22 +11,34 @@ const menu = document.querySelector('.popup-menu')
 let isActive = false
 
 
-
-profileButton.addEventListener('click', async () => {
-  isActive = !isActive;
-  console.log(isActive);
-  if (isActive) {
-    setTimeout(() => { menu.style.display = 'block';
-  }, 30)
-   
-    menu.style.transform = 'scale(1)'; 
-  } else {
-    menu.style.transform = 'scale(0.9)'; 
+document.body.addEventListener('click', (event) => {
+  if (!menu.contains(event.target) && isActive) {
+    isActive = false;
+    menu.style.transform = 'scale(0.9)';
     setTimeout(() => {
       menu.style.display = 'none';
-    }, 30); 
+    }, 30);
   }
 });
+
+profileButton.addEventListener('click', async (event) => {
+  event.stopPropagation();
+
+  isActive = !isActive;
+  if (isActive) {
+    setTimeout(() => {
+      menu.style.display = 'block';
+    }, 30);
+
+    menu.style.transform = 'scale(1)';
+  } else {
+    menu.style.transform = 'scale(0.9)';
+    setTimeout(() => {
+      menu.style.display = 'none';
+    }, 30);
+  }
+});
+
 
 
 function showOnMap(position, artistData, personalData) {

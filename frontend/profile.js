@@ -34,15 +34,11 @@ async function showSpotifyInfo() {
       }
 
       function loopFriends() {
-        // Select the element where you want to display the friend's information
         const friendsElem = document.getElementById('friends');
-        
-        // Loop through the friends array and create <p> elements for each friend's name and recentlyPlayed
+
         friends.forEach(friend => {
           const paragraph = document.createElement('p');
-          // Set the innerHTML of the <p> element with friend's name and recentlyPlayed
           paragraph.innerHTML = `<strong>${friend.name}</strong>: ${friend.recentlyPlayed}`;
-          // Append the <p> element to the friendsElem element in the HTML
           friendsElem.appendChild(paragraph);
         });
       }
