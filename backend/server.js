@@ -5,6 +5,7 @@ var SpotifyWebApi = require('spotify-web-api-node');
 const jwt = require('jsonwebtoken');
 const { getAccountByUsername, saveAccount } = require('./database/operations');
 const { hashPassword, comparePassword } = require('./utils/bcrypt');
+const port = process.env.PORT || 3000;
 
 app.use(express.static('../frontend'));
 app.use(express.json());
@@ -220,7 +221,7 @@ app.post('/auth/login', async (request, response) => {
 
  
 
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log("Server running at port 3000");
 });
 
