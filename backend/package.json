@@ -15,5 +15,6 @@
     "nedb-promise": "^2.0.1",
     "spotify-web-api-node": "^5.0.2"
   },
+  "devDependencies": {},
   "description": ""
 }
