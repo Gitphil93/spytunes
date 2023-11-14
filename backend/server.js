@@ -46,7 +46,7 @@ var spotifyApi = new SpotifyWebApi({
  
 
   app.get('/spotify-login', (req, res) => {
-    const redirectUri = 'http://localhost:3000/callback'
+    const redirectUri = 'https://spytunes-backend-7bb58376fee2.herokuapp.com/callback'
     res.redirect(spotifyApi.createAuthorizeURL(scopes, null, redirectUri));
   });
 
