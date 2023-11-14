@@ -71,9 +71,9 @@ function showOnMap(position, artistData, personalData) {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
-          const artistResponse = await fetch('http://localhost:3000/currently-playing');
+          const artistResponse = await fetch('https://tranquil-garden-05140-2fe6c29e620d.herokuapp.com/currently-playing');
           const artistData = await artistResponse.json();
-          const response = await fetch('http://localhost:3000/personal-data');
+          const response = await fetch('https://tranquil-garden-05140-2fe6c29e620d.herokuapp.com/personal-data');
           const personalData = await response.json();
           console.log(artistData, personalData);
           showOnMap(position, artistData || null, personalData || null);

@@ -5,7 +5,7 @@ const registerButton = document.querySelector('#register-button')
 
 //skapa konto
 async function createAccount (credentials) {
-    const response = await fetch('http://localhost:3000/auth/register', {
+    const response = await fetch('https://tranquil-garden-05140-2fe6c29e620d.herokuapp.com/auth/register', {
         method: 'POST',
         body: JSON.stringify(credentials),
         headers: {
@@ -28,7 +28,7 @@ function saveToken(token) {
 
 
 async function login(credentials){
-    const response = await fetch('http://localhost:3000/auth/login', {
+    const response = await fetch('https://tranquil-garden-05140-2fe6c29e620d.herokuapp.com/auth/login', {
         method: 'POST',
         body: JSON.stringify(credentials),
         headers: {
@@ -42,7 +42,7 @@ async function login(credentials){
     if (data.success) {
         console.log(data.token)
         saveToken(data.token);
-        window.location.href = 'http://localhost:3000/spotify-login';
+        window.location.href = 'https://tranquil-garden-05140-2fe6c29e620d.herokuapp.com/spotify-login';
 
     }
 
