@@ -72,13 +72,21 @@ function showOnMap(position, artistData, personalData) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
           const artistResponse = await fetch('https://spytunes-backend-7bb58376fee2.herokuapp.com/currently-playing');
+          if (!artistResponse.ok) {
+            throw new Error(`HTTP error! Status: ${artistResponse.status}`);
+          }
           const artistData = await artistResponse.json();
+  
           const response = await fetch('https://spytunes-backend-7bb58376fee2.herokuapp.com/personal-data');
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
           const personalData = await response.json();
+  
           console.log(artistData, personalData);
           showOnMap(position, artistData || null, personalData || null);
         } catch (error) {
-          console.error('Error getting data:', error);
+          console.error('Error getting data:', error.message);
           // If there's an error getting artist or personal data,
           // pass null values to show only the position marker
           showOnMap(position, null, null);
@@ -86,6 +94,7 @@ function showOnMap(position, artistData, personalData) {
       });
     }
   }
+  
   
   function showMenu() {
    
