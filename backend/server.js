@@ -3,60 +3,63 @@ const path = require('path'); // Import the path module
 const app = express()
 var SpotifyWebApi = require('spotify-web-api-node');
 const jwt = require('jsonwebtoken');
-const { getAccountByUsername, saveAccount } = require('./database/operations');
+const { getAccountByUsername, saveAccount, updateSong} = require('./database/operations');
 const { hashPassword, comparePassword } = require('./utils/bcrypt');
+const { Console } = require('console');
 const port = process.env.PORT || 3000;
 
-app.use(express.static('../frontend'));
 app.use(express.json());
+app.use(express.static('../frontend'));
+
 
 //spotify API
-const scopes = [
-    'ugc-image-upload',
-    'user-read-playback-state',
-    'user-modify-playback-state',
-    'user-read-currently-playing',
-    'streaming',
-    'app-remote-control',
-    'user-read-email',
-    'user-read-private',
-    'playlist-read-collaborative',
-    'playlist-modify-public',
-    'playlist-read-private',
-    'playlist-modify-private',
-    'user-library-modify',
-    'user-library-read',
-    'user-top-read',
-    'user-read-playback-position',
-    'user-read-recently-played',
-    'user-follow-read',
-    'user-follow-modify'
 
-  ];
 
- 
-
-var spotifyApi = new SpotifyWebApi({
+/*   var spotifyApi = new SpotifyWebApi({
     clientId: 'f8f1713b777347b98ca3934762b892b9',
     clientSecret: 'c1dfd3d453094ba19004b82174a9f9fe',
-    redirectUri: 'https://spytunes-backend-7bb58376fee2.herokuapp.com/callback'
+    redirectUri: 'http://localhost:3000/callback'
   });
-
-
- 
+ */
 
   app.get('/spotify-login', (req, res) => {
-    const redirectUri = 'https://spytunes-backend-7bb58376fee2.herokuapp.com/callback'
+    const redirectUri = 'http://localhost:3000/callback'
+    const scopes = [
+      'ugc-image-upload',
+      'user-read-playback-state',
+      'user-modify-playback-state',
+      'user-read-currently-playing',
+      'streaming',
+      'app-remote-control',
+      'user-read-email',
+      'user-read-private',
+      'playlist-read-collaborative',
+      'playlist-modify-public',
+      'playlist-read-private',
+      'playlist-modify-private',
+      'user-library-modify',
+      'user-library-read',
+      'user-top-read',
+      'user-read-playback-position',
+      'user-read-recently-played',
+      'user-follow-read',
+      'user-follow-modify'
+    ];
+    const spotifyApi = new SpotifyWebApi({
+      clientId: 'f8f1713b777347b98ca3934762b892b9',
+      clientSecret: 'c1dfd3d453094ba19004b82174a9f9fe',
+      redirectUri,
+    });
     res.redirect(spotifyApi.createAuthorizeURL(scopes, null, redirectUri));
   });
 
- 
 
-  app.get('/callback', (req, res) => {
+  let access_token;
+  let refresh_token;
+  app.get('/callback', async (req, res) => {
     const error = req.query.error;
     const code = req.query.code;
     const state = req.query.state;
- 
 
     if (error) {
       console.error('Callback Error:', error);
@@ -64,50 +67,53 @@ var spotifyApi = new SpotifyWebApi({
       return;
     }
 
- 
-
-    spotifyApi
-      .authorizationCodeGrant(code)
-      .then(data => {
-        const access_token = data.body['access_token'];
-        const refresh_token = data.body['refresh_token'];
-        const expires_in = data.body['expires_in'];
- 
-        spotifyApi.setAccessToken(access_token);
-        spotifyApi.setRefreshToken(refresh_token);
-
-        console.log('access_token:', access_token);
-        console.log('refresh_token:', refresh_token);
-
- 
-
-        console.log(
-          `Sucessfully retreived access token. Expires in ${expires_in} s.`
-        );
-
-        res.redirect('https://spytunes-backend-7bb58376fee2.herokuapp.com/');
-
-        setInterval(async () => {
-          const data = await spotifyApi.refreshAccessToken();
-          const access_token = data.body['access_token'];
- 
-          console.log('The access token has been refreshed!');
-          console.log('access_token:', access_token);
-          spotifyApi.setAccessToken(access_token);
-        }, expires_in / 2 * 1000);
-      })
-
-      .catch(error => {
-        console.error('Error getting Tokens:', error);
-        res.send(`Error getting Tokens: ${error}`);
-      });
-  });
-
-
- app.get('/currently-playing', async (req, res) => {
-
     try {
-      const response = await spotifyApi.getMyCurrentPlaybackState();
+      const spotifyApi = new SpotifyWebApi({
+        clientId: 'f8f1713b777347b98ca3934762b892b9',
+        clientSecret: 'c1dfd3d453094ba19004b82174a9f9fe',
+        redirectUri: 'http://localhost:3000/callback',
+      });
+
+      const data = await spotifyApi.authorizationCodeGrant(code);
+      access_token = data.body['access_token'];
+      refresh_token = data.body['refresh_token'];
+      const expires_in = data.body['expires_in'];
+  
+      spotifyApi.setAccessToken(access_token);
+      spotifyApi.setRefreshToken(refresh_token);
+  
+      console.log('access_token:', access_token);
+      console.log('refresh_token:', refresh_token);
+  
+      console.log(`Successfully retrieved access token. Expires in ${expires_in} s.`);
+  
+      res.redirect('/');
+
+      setInterval(async () => {
+        const refreshData = await spotifyApi.refreshAccessToken();
+        const newAccessToken = refreshData.body['access_token'];
+  
+        console.log('The access token has been refreshed!');
+        console.log('new access_token:', newAccessToken);
+        spotifyApi.setAccessToken(newAccessToken);
+      }, expires_in / 2 * 1000);
+    } catch (error) {
+      console.error('Error getting Tokens:', error);
+      res.send(`Error getting Tokens: ${error}`);
+    }
+  });
+  
+  
+  
+
+  app.get('/currently-playing', async (req, res) => {
+    try {
+      const loggedInSpotifyApi = new SpotifyWebApi();
+
+      loggedInSpotifyApi.setAccessToken(access_token);
+      loggedInSpotifyApi.setRefreshToken(refresh_token);
+   
+      const response = await loggedInSpotifyApi.getMyCurrentPlaybackState();
       res.json(response.body.item);
     } catch (error) {
       console.error('Error getting current playback state:', error);
@@ -115,12 +121,20 @@ var spotifyApi = new SpotifyWebApi({
     }
 
   });
-
+  
  
 
 app.get('/personal-data', async (req,res) => {
     try {
-        const response = await spotifyApi.getMe()
+      const spotifyApi = new SpotifyWebApi({
+        clientId: 'f8f1713b777347b98ca3934762b892b9',
+        clientSecret: 'c1dfd3d453094ba19004b82174a9f9fe',
+        redirectUri: 'http://localhost:3000/callback',
+      });
+
+      spotifyApi.setAccessToken(access_token);
+      spotifyApi.setRefreshToken(refresh_token);
+      const response = await spotifyApi.getMe();
         res.json(response.body)
         console.log(response.body)
 
@@ -163,11 +177,11 @@ app.post('/auth/register', async (request, response) => {
     credentials.password = hashedPassword;
 
     saveAccount(credentials);
-
+    console.log("Account created")
   }
   response.json(resObj);
   console.log("resObj",resObj)
-  console.log("Account created")
+ 
 
 })
 
@@ -184,45 +198,64 @@ app.get('/profile', (req, res) => {
 
 app.post('/auth/login', async (request, response) => {
   const credentials = request.body;
-  console.log(credentials)
-  // { username: 'ada', password: 'pwd123'}
+  console.log(credentials);
 
   const resObj = {
     success: false,
     token: ''
-  }
+  };
 
+  try {
     const account = await getAccountByUsername(credentials.email);
-    console.log(account);
-
+    console.log("Account Log", account);
 
     if (account.length > 0) {
-      const correctPassword = await comparePassword(credentials.password, account[0].password);
-      console.log(correctPassword);
+  
+      resObj.success = true;
+  
 
-      if (correctPassword) {
+      const token = jwt.sign({ email: account[0].email }, 'a1b1c1', {
+        expiresIn: 600
+      });
+      console.log('token info', token)
 
-        resObj.success = true;
-        const token = jwt.sign({ username: account[0].username }, 'a1b1c1', {
-
-          expiresIn: 600 //token (jwt) går ut om 10 min / 600 sekunder (värdet skrivs ut i sekunder)
-
-        });
- 
-        resObj.token = token; //skickar/lägger in vår token till response objekt (resObj) ovan
-
-      }
-
+      resObj.token = token;
     }
+  } catch (error) {
+    console.error('Error during login:', error);
+    resObj.error = 'Error during login';
+  }
 
-    response.json(resObj); //skickas tillbaka här från resObj token ovan
+  response.json(resObj);
+});
 
-  })
+app.post('/update-account', async (req, res) => {
+  const currentSong = req.body;
+  console.log(currentSong);
+       // Extract user information from the token
+       const token = req.headers.authorization.split(' ')[1];
+       const decoded = jwt.verify(token, 'a1b1c1');
+       const userEmail = decoded.email;
 
- 
+
+  try {
+    // Await the completion of the updateSong function
+    const result = await updateSong(userEmail, currentSong);
+
+    // Send the response based on the result
+    if (result.success) {
+      res.status(200).json(result);
+    } else {
+      res.status(500).json(result);
+    }
+  } catch (error) {
+    console.error('Error in update-account route:', error);
+    res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+});
 
 app.listen(port, () => {
-  console.log("Server running at port 3000");
+  console.log("Server running at port " +port);
 });
 
  

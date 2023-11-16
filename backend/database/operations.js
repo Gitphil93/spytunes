@@ -15,11 +15,21 @@ async function getAccountByUsername(username){
 }
 
 //sätt in nytt konto i databasen
-function saveAccount(account) {
+async function saveAccount(account) {
     database.insert(account);
     console.log("Accounted added to database")
 }
 
+async function updateSong(userEmail, currentSong) {
+    try {
+        await database.update({ email: userEmail }, { $set: {currentSong: currentSong } }, {});
+        console.log("Current song updated successfully");
+        return { success: true, message: 'Current song updated successfully' };
+    } catch (error) {
+        console.error('Error updating current song:', error);
+        return { success: false, error: 'Internal server error' };
+    }
+}
 
 
 
@@ -38,4 +48,4 @@ async function createAdmin(){
 
 
 //exportera och importera i server.js
-module.exports = { getAccountByUsername, saveAccount, createAdmin}
+module.exports = { getAccountByUsername, saveAccount, createAdmin, updateSong}

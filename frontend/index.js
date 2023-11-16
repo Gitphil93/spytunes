@@ -49,18 +49,24 @@ function showOnMap(position, artistData, personalData) {
       center: [position.coords.longitude, position.coords.latitude],
       zoom: 15
     });
-    profilePic.src = personalData.images[0].url
+
+
     menuProfilePic.src = personalData.images[0].url
     menuProfileName.innerHTML = personalData.display_name
     profilePic.src = personalData.images[0].url
     const el = document.createElement('div');
     el.className = 'marker';
+
+    if (!profilePic.src) {
+      profilePic.src = "./assets/headphones-icon.svg";
+      menuProfilePic.src = "./assets/headphones-icon.svg";
+    }
   
     new mapboxgl.Marker(el)
       .setLngLat([position.coords.longitude, position.coords.latitude])
       .setPopup(
         new mapboxgl.Popup({ offset: 25 })
-          .setHTML(`<h3>${personalData.display_name}</h3><img src="${personalData.images[0].url}" style="width: 70px; height: 70px; border-radius: 50%;"><h3>Now playing: ${artistData.name} by ${artistData.artists[0].name}</h3>`)
+          .setHTML(`<h3>${personalData.display_name}</h3><img src="${profilePic.src}" style="width: 70px; height: 70px; border-radius: 50%;"><h3>Now playing: ${artistData.name} by ${artistData.artists[0].name}</h3>`)
       )
       .addTo(map);
   }
@@ -71,11 +77,16 @@ function showOnMap(position, artistData, personalData) {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
-          const artistResponse = await fetch('https://spytunes-backend-7bb58376fee2.herokuapp.com/currently-playing');
+          const artistResponse = await fetch('http://localhost:3000/currently-playing');
           const artistData = await artistResponse.json();
-          const response = await fetch('https://spytunes-backend-7bb58376fee2.herokuapp.com/personal-data');
+          const response = await fetch('http://localhost:3000/personal-data');
           const personalData = await response.json();
           console.log(artistData, personalData);
+
+          const currentSong = {"artist": artistData.artists[0].name, "title": artistData.name}
+
+          updateAccount(currentSong)
+
           showOnMap(position, artistData || null, personalData || null);
         } catch (error) {
           console.error('Error getting data:', error);
@@ -86,10 +97,29 @@ function showOnMap(position, artistData, personalData) {
       });
     }
   }
+
+  async function updateAccount(currentSong) {
+    const token = sessionStorage.getItem('token');
+
+    if (token) {
+        try {
+            const response = await fetch('/update-account', {
+                method: 'POST',
+                body: JSON.stringify(currentSong),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                },
+            });
+
+            const result = await response.json();
+            console.log(result);
+        } catch (error) {
+            console.error('Error updating account:', error);
+        }
+    }
+}
   
-  function showMenu() {
-   
-  }
 
 
 
