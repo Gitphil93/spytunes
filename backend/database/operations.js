@@ -32,6 +32,17 @@ async function updateSong(userEmail, currentSong) {
 }
 
 
+async function getSongs(userEmail) {
+ const getSongs = await database.find({ currentSong: { $exists: true } }, (err, docs) => {
+    if (err) {
+        console.error('Error retrieving current songs:', err);
+    } else {
+        console.log('All current songs:', docs.map(doc => doc.currentSong));
+    }
+});
+}
+
+
 
 
 
@@ -48,4 +59,4 @@ async function createAdmin(){
 
 
 //exportera och importera i server.js
-module.exports = { getAccountByUsername, saveAccount, createAdmin, updateSong}
+module.exports = { getAccountByUsername, saveAccount, createAdmin, updateSong, getSongs}

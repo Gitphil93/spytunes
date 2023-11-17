@@ -215,7 +215,7 @@ app.post('/auth/login', async (request, response) => {
   
 
       const token = jwt.sign({ email: account[0].email }, 'a1b1c1', {
-        expiresIn: 600
+        expiresIn: 1200 //hade 600 innan
       });
       console.log('token info', token)
 
@@ -253,6 +253,11 @@ app.post('/update-account', async (req, res) => {
     res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
+
+
+app.get('/get-song', async (req, res) => {
+
+})
 
 app.listen(port, () => {
   console.log("Server running at port " +port);

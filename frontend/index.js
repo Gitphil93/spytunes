@@ -83,7 +83,10 @@ function showOnMap(position, artistData, personalData) {
           const personalData = await response.json();
           console.log(artistData, personalData);
 
-          const currentSong = {"artist": artistData.artists[0].name, "title": artistData.name}
+          const currentSong = {"artist": artistData.artists[0].name,
+           "title": artistData.name
+          }
+
 
           updateAccount(currentSong)
 
