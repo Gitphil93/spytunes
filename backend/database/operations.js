@@ -20,9 +20,9 @@ async function saveAccount(account) {
     console.log("Accounted added to database")
 }
 
-async function updateSong(userEmail, currentSong) {
+async function updateSongPos(userEmail, songPos) {
     try {
-        await database.update({ email: userEmail }, { $set: {currentSong: currentSong } }, {});
+        await database.update({ email: userEmail }, { $set: {songPos} });
         console.log("Current song updated successfully");
         return { success: true, message: 'Current song updated successfully' };
     } catch (error) {
@@ -32,15 +32,20 @@ async function updateSong(userEmail, currentSong) {
 }
 
 
-async function getSongs(userEmail) {
- const getSongs = await database.find({ currentSong: { $exists: true } }, (err, docs) => {
-    if (err) {
-        console.error('Error retrieving current songs:', err);
-    } else {
-        console.log('All current songs:', docs.map(doc => doc.currentSong));
-    }
-});
+async function getSongPos(userEmail) {
+    const currentUserSongPos = await database.findOne({ email: userEmail, 'songPos': { $exists: true } });
+    return currentUserSongPos ? currentUserSongPos.songPos : null;
 }
+
+
+async function getOtherUsersSongPos() {
+    const otherUsersSongPosArray = await database.find({ 'songPos': { $exists: true } });
+    const formattedOtherUsersSongPosArray = otherUsersSongPosArray.map(doc => doc.songPos);
+    return formattedOtherUsersSongPosArray;
+}
+
+
+
 
 
 
@@ -59,4 +64,4 @@ async function createAdmin(){
 
 
 //exportera och importera i server.js
-module.exports = { getAccountByUsername, saveAccount, createAdmin, updateSong, getSongs}
+module.exports = { getAccountByUsername, saveAccount, createAdmin, updateSongPos, getSongPos, getOtherUsersSongPos}

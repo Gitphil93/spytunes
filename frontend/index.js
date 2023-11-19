@@ -2,10 +2,10 @@
 const API_TOKEN = 'pk.eyJ1IjoibWFwLXBoaWwiLCJhIjoiY2xncDJma3RoMGF1ajNmc3V2NnhoZ21reCJ9.q61tna0GR6GFleO2otlW2g';
 const buttonElem = document.querySelector('#position-button');
 const profileButton = document.querySelector('.profile-container')
-const profilePic = document.querySelector('#profile')
+let profilePic = document.querySelector('#profile')
 //const logoutButton = document.querySelector('#logout-button')
-const menuProfilePic = document.querySelector('#profile-card-pic')
-const menuProfileName = document.querySelector('#profile-card-name')
+let menuProfilePic = document.querySelector('#profile-card-pic')
+let menuProfileName = document.querySelector('#profile-card-name')
 const menu = document.querySelector('.popup-menu')
 
 let isActive = false
@@ -41,74 +41,135 @@ profileButton.addEventListener('click', async (event) => {
 
 
 
-function showOnMap(position, artistData, personalData) {
-    mapboxgl.accessToken = API_TOKEN;
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: [position.coords.longitude, position.coords.latitude],
-      zoom: 15
+function showOnMap(yourPosition, yourArtistData, yourPersonalData, otherSongPos) {
+  mapboxgl.accessToken = API_TOKEN;
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/light-v11',
+    center: [yourPosition.longitude, yourPosition.latitude],
+    zoom: 12
+  });
+
+  // Visa din position
+  showMarker(map, yourPosition, yourArtistData, yourPersonalData);
+
+  console.log(2, otherSongPos[0])
+  if (Array.isArray(otherSongPos)) {
+    otherSongPos.forEach(user => {
+      if (user) {
+        
+
+        showMarker(map, user.position, user.songData);//Använder yourPersonalData så länge för att det ej finns i db
+      } else {
+        console.error('Ogiltig användardata:', user);
+      }
     });
-
-
-    menuProfilePic.src = personalData.images[0].url
-    menuProfileName.innerHTML = personalData.display_name
-    profilePic.src = personalData.images[0].url
-    const el = document.createElement('div');
-    el.className = 'marker';
-
-    if (!profilePic.src) {
-      profilePic.src = "./assets/headphones-icon.svg";
-      menuProfilePic.src = "./assets/headphones-icon.svg";
-    }
-  
-    new mapboxgl.Marker(el)
-      .setLngLat([position.coords.longitude, position.coords.latitude])
-      .setPopup(
-        new mapboxgl.Popup({ offset: 25 })
-          .setHTML(`<h3>${personalData.display_name}</h3><img src="${profilePic.src}" style="width: 70px; height: 70px; border-radius: 50%;"><h3>Now playing: ${artistData.name} by ${artistData.artists[0].name}</h3>`)
-      )
-      .addTo(map);
   }
+}
 
 
+//Använder yourPersonalData så länge för att det ej finns i db
+function showMarker(map, position, artistData) {
+  console.log("Artist data: ", artistData)
+  const el = document.createElement('div');
+  el.className = 'marker';
 
-  async function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        try {
-          const artistResponse = await fetch('http://localhost:3000/currently-playing');
-          const artistData = await artistResponse.json();
-          const response = await fetch('http://localhost:3000/personal-data');
-          const personalData = await response.json();
-          console.log(artistData, personalData);
+  const userPic = document.createElement('img');
+  userPic.src = "./assets/headphones-icon.svg";
+  userPic.style.width = "70px";
+  userPic.style.height = "70px";
+  userPic.style.borderRadius = "50%";
 
-          const currentSong = {"artist": artistData.artists[0].name,
-           "title": artistData.name
-          }
+  const userName = document.createElement('h3');
+  userName.innerHTML = "User";
 
+  new mapboxgl.Marker(el)
+    .setLngLat([position.longitude, position.latitude])
+    .setPopup(
+      new mapboxgl.Popup({ offset: 25 })
+        .setHTML(`<h3>${userName.innerHTML}</h3>${userPic.outerHTML}<h3>Now playing: ${artistData.title} by ${artistData.artist}</h3>`)
+    )
+    .addTo(map);
+}
 
-          updateAccount(currentSong)
-
-          showOnMap(position, artistData || null, personalData || null);
-        } catch (error) {
-          console.error('Error getting data:', error);
-          // If there's an error getting artist or personal data,
-          // pass null values to show only the position marker
-          showOnMap(position, null, null);
-        }
-      });
-    }
-  }
-
-  async function updateAccount(currentSong) {
+  async function fetchData(url) {
     const token = sessionStorage.getItem('token');
+
+    if (!token) {
+        throw new Error('Token not available.');
+    }
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error fetching data. Status: ${response.status}`);
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error(`Error fetching data from ${url}:`, error);
+        throw error;
+    }
+}
+
+async function getLocation() {
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+          try {
+              const artistData = await fetchData('/currently-playing');
+              const personalData = await fetchData('/personal-data');
+              console.log(personalData)
+
+              const currentSong = {
+                  "artist": artistData.artists[0].name,
+                  "title": artistData.name
+              };
+
+              updateAccount(currentSong, position);
+              const yourSongPos = await getYourSongPos(); // Fetch personal data separately
+              const otherSongPos = await getOtherSongPos();
+              console.log("your SongPos", yourSongPos)
+              console.log("other song pos", otherSongPos)
+              showOnMap(
+                yourSongPos.position,
+                yourSongPos.songData,
+                personalData || null,
+                otherSongPos
+            );
+         
+
+          } catch (error) {
+              console.error('Error getting data:', error);
+              showOnMap(position, null, null); // If there's an error, show only the position marker
+          }
+      });
+  }
+}
+
+
+  async function updateAccount(currentSong, position) {
+    const token = sessionStorage.getItem('token');
+    position = {longitude: position.coords.longitude, latitude: position.coords.latitude }
+
+    const songPos = {
+      artist: currentSong.artist,
+      title: currentSong.title,
+      longitude: position.longitude,
+      latitude: position.latitude
+  };
 
     if (token) {
         try {
             const response = await fetch('/update-account', {
                 method: 'POST',
-                body: JSON.stringify(currentSong),
+                body: JSON.stringify(songPos),
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token,
@@ -116,13 +177,95 @@ function showOnMap(position, artistData, personalData) {
             });
 
             const result = await response.json();
-            console.log(result);
         } catch (error) {
             console.error('Error updating account:', error);
         }
     }
 }
   
+async function getYourSongPos() {
+  const token = sessionStorage.getItem('token');
+
+  if (token) {
+      try {
+          const response = await fetch("/get-song-pos", {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + token,
+              },
+          });
+
+          if (response.ok) {
+              const result = await response.json();
+              console.log("Your currently playing song and position", result);
+
+              const position = {
+                 longitude: result.longitude,
+                 latitude: result.latitude
+              }
+              const songData = {
+                  artist: result.artist,
+                  title: result.title
+              };
+
+              return { position, songData };
+          } else {
+              console.error("Error getting song and position. Status:", response.status);
+              return { position: null, songData: null };
+          }
+      } catch (error) {
+          console.error("Error getting song and position", error);
+          return { position: null, songData: null };
+      }
+  }
+}
+
+
+async function getOtherSongPos() {
+  const token = sessionStorage.getItem('token');
+
+  if (token) {
+    try {
+      const response = await fetch("/get-other-users-song-pos", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Other users currently playing song and position", result);
+
+        const userPositions = result.map(user => {
+          if (user) {
+            const position = {
+              longitude: user.longitude+0.01,
+              latitude: user.latitude+0.01,
+            };
+            const songData = {
+              artist: user.artist,
+              title: user.title,
+            };
+            console.log(position, songData )
+            return { position, songData };
+          } else {
+            console.log('Invalid user data:', user);
+            return null;
+          }
+        });
+
+        return userPositions.filter(position => position !== null);
+      } else {
+        console.error("Error getting song and position. Status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error getting song and position", error);
+    }
+  }
+}
 
 
 

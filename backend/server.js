@@ -3,7 +3,7 @@ const path = require('path'); // Import the path module
 const app = express()
 var SpotifyWebApi = require('spotify-web-api-node');
 const jwt = require('jsonwebtoken');
-const { getAccountByUsername, saveAccount, updateSong} = require('./database/operations');
+const { getAccountByUsername, saveAccount, updateSongPos, getSongPos, getOtherUsersSongPos} = require('./database/operations');
 const { hashPassword, comparePassword } = require('./utils/bcrypt');
 const { Console } = require('console');
 const port = process.env.PORT || 3000;
@@ -230,8 +230,7 @@ app.post('/auth/login', async (request, response) => {
 });
 
 app.post('/update-account', async (req, res) => {
-  const currentSong = req.body;
-  console.log(currentSong);
+  const songPos = req.body;
        // Extract user information from the token
        const token = req.headers.authorization.split(' ')[1];
        const decoded = jwt.verify(token, 'a1b1c1');
@@ -239,8 +238,8 @@ app.post('/update-account', async (req, res) => {
 
 
   try {
-    // Await the completion of the updateSong function
-    const result = await updateSong(userEmail, currentSong);
+    
+    const result = await updateSongPos(userEmail, songPos);
 
     // Send the response based on the result
     if (result.success) {
@@ -255,9 +254,45 @@ app.post('/update-account', async (req, res) => {
 });
 
 
-app.get('/get-song', async (req, res) => {
+app.get('/get-song-pos', async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, 'a1b1c1');
+    const userEmail = decoded.email;
+      const songPosData = await getSongPos(userEmail);
 
-})
+      if (songPosData !== undefined) {
+          res.status(200).json(songPosData);
+      } else {
+          console.error('Error: songPosData is undefined');
+          res.status(500).json({ success: false, error: 'Internal server error' });
+      }
+  } catch (error) {
+      console.error('Error in get-song-pos route:', error);
+      res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+});
+
+app.get('/get-other-users-song-pos', async (req, res) => {
+  try {
+      const otherUsersSongPosData = await getOtherUsersSongPos();
+      
+      console.log(123, otherUsersSongPosData);
+
+      if (otherUsersSongPosData !== undefined) {
+          res.status(200).json(otherUsersSongPosData);
+      } else {
+          console.error('Error: otherUsersSongPosData is undefined');
+          res.status(500).json({ success: false, error: 'Internal server error' });
+      }
+  } catch (error) {
+      console.error('Error in get-other-users-song-pos route:', error);
+      res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+});
+
+
+
 
 app.listen(port, () => {
   console.log("Server running at port " +port);
