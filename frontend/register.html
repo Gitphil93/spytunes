@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="login.css" />
+    <script src="register.js" defer></script>
+    <title>Spytunes - Register</title>
+  </head>
+  <body>
+    <div class="main">
+        <h1>spytunes</h1>
+        <div class="login-wrapper">
+            <div class="login-form">
+                <h2 id="login-text">Register</h2>
+                <div class="input-wrapper">
+                    <input type="text" id="first-name" placeholder="First Name">
+                    <input type="text" id="last-name" placeholder="Last Name">
+                    <input type="email" id="email-register" placeholder="Email">
+                    <input type="password" id="password" placeholder="Password">
+                    <input type="password" id="password-repeat" placeholder="Repeat Password">
+                    <label for="birthYear">Your Birth Year:</label>
+                    <select id="birth-year" name="birthYear"></select>
+            
+
+                <div class="radio-wrapper">
+                
+                <input type="radio" value="Male" name="gender" class="radio-button">
+                <label for="Male">Male</label>
+                <input type="radio" value="Female" name="gender" class="radio-button">
+                <label for="Female">Female</label>
+                <input type="radio" value="Other" name="gender" class="radio-button">
+                <label for="Other">Other</label>
+            </div>
+            
+                <p>Already have an account? <a id="login-link">Log in here</a></p>
+
+              </div>
+              <div class="button-wrapper">
+                <button id="register-button">Register</button>
+              </div>
+              </div>
+            </div>
+    </div>
+  </body>
+</html>

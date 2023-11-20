@@ -178,6 +178,9 @@ app.post('/auth/register', async (request, response) => {
 
     saveAccount(credentials);
     console.log("Account created")
+
+    res.redirect('/auth');
+
   }
   response.json(resObj);
   console.log("resObj",resObj)
@@ -189,7 +192,10 @@ app.post('/auth/register', async (request, response) => {
   res.sendFile(path.join(__dirname, '../frontend', 'login.html'));
  // console.log(credentials)
 });
-
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend', 'register.html'));
+ // console.log(credentials)
+});
 app.get('/profile', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend', 'profile.html'));
  // console.log(credentials)

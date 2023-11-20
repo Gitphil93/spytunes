@@ -1,26 +1,9 @@
 const emailLogin = document.querySelector('#username-login')
 const passwordLogin = document.querySelector('#password-login')
 const loginButton = document.querySelector('#login-button')
-const registerButton = document.querySelector('#register-button')
+
 
 //skapa konto
-async function createAccount (credentials) {
-    const response = await fetch('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(credentials),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    const data = await response.json();
-    console.log(data);
- }
-
- //sätt token
-
-function saveToken(token) {
-    sessionStorage.setItem('token', token);
-}
 
 
 
@@ -47,6 +30,12 @@ async function login(credentials){
     }
 
  }
+
+  //sätt token
+
+function saveToken(token) {
+    sessionStorage.setItem('token', token);
+}
 
  
 
