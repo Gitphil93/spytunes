@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+import bcrypt from 'bcryptjs'
 
 //hur många gånger lösenordet kommer krypteras
 const saltRounds = 10;
@@ -17,4 +17,4 @@ async function comparePassword(password, storedPassword) {
 
 
 //Exportera funktionen (krypterat lösenord), importera båda i server.js
-module.exports = { hashPassword, comparePassword }
+export { hashPassword, comparePassword }

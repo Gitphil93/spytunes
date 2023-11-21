@@ -1,15 +1,34 @@
-const express = require('express')
-const path = require('path'); // Import the path module
+import express from 'express'
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import path from 'path'; // Import the path module
 const app = express()
-var SpotifyWebApi = require('spotify-web-api-node');
-const jwt = require('jsonwebtoken');
-const { getAccountByUsername, saveAccount, updateSongPos, getSongPos, getOtherUsersSongPos} = require('./database/operations');
-const { hashPassword, comparePassword } = require('./utils/bcrypt');
-const { Console } = require('console');
+import SpotifyWebApi from 'spotify-web-api-node'
+import jwt from 'jsonwebtoken'
+import { getAccountByUsername, saveAccount, updateSongPos, getSongPos, getOtherUsersSongPos} from './database/operations.js'
+import { hashPassword, comparePassword } from './utils/bcrypt.js'
 const port = process.env.PORT || 3000;
+import { initializeApp } from 'firebase-admin/app';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 app.use(express.json());
 app.use(express.static('../frontend'));
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAUK1tSNkygcYcV8w7ztn4CiNMhCKXMEBc",
+  authDomain: "spytunes-2bf4d.firebaseapp.com",
+  databaseURL: "https://spytunes-2bf4d-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "spytunes-2bf4d",
+  storageBucket: "spytunes-2bf4d.appspot.com",
+  messagingSenderId: "425165644340",
+  appId: "1:425165644340:web:dafd7b11c398df76432061"
+};
+
+const fireBaseApp = initializeApp(firebaseConfig);
 
 
 //spotify API

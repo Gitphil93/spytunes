@@ -1,5 +1,5 @@
-const nedb = require('nedb-promise');
-const { hashPassword } = require('../utils/bcrypt');
+import nedb from 'nedb-promise'
+import { hashPassword, comparePassword } from '../utils/bcrypt.js'
 const database = new nedb ({ filename: 'accounts.db', autoload: true });
 
 
@@ -64,4 +64,4 @@ async function createAdmin(){
 
 
 //exportera och importera i server.js
-module.exports = { getAccountByUsername, saveAccount, createAdmin, updateSongPos, getSongPos, getOtherUsersSongPos}
+export { getAccountByUsername, saveAccount, createAdmin, updateSongPos, getSongPos, getOtherUsersSongPos}

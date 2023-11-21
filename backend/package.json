@@ -2,7 +2,9 @@
   "name": "spytunes",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+ 
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
@@ -12,6 +14,7 @@
     "bcryptjs": "^2.4.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "firebase-admin": "^11.11.0",
     "jsonwebtoken": "^9.0.2",
     "nedb-promise": "^2.0.1",
     "spotify-web-api-node": "^5.0.2"
