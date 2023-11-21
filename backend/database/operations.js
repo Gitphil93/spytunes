@@ -17,7 +17,7 @@ async function getAccountByUsername(username){
 //sätt in nytt konto i databasen
 async function saveAccount(account) {
     database.insert(account);
-    console.log("Accounted added to database")
+    console.log("Account added to database")
 }
 
 async function updateSongPos(userEmail, songPos) {

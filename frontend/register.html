@@ -15,31 +15,58 @@
             <div class="login-form">
                 <h2 id="login-text">Register</h2>
                 <div class="input-wrapper">
-                    <input type="text" id="first-name" placeholder="First Name">
-                    <input type="text" id="last-name" placeholder="Last Name">
-                    <input type="email" id="email-register" placeholder="Email">
-                    <input type="password" id="password" placeholder="Password">
-                    <input type="password" id="password-repeat" placeholder="Repeat Password">
-                    <label for="birthYear">Your Birth Year:</label>
-                    <select id="birth-year" name="birthYear"></select>
-            
+                    <div class="cool-input">
+                        <label for="firstname" class="text">First name</label>
+                    <input type="text" id="first-name" name="firstname" placeholder="" class="input">
+                    </div>
+                    <div class="cool-input">
+                    <label for="lastname" class="text">Last name</label>
+                    <input type="text" id="last-name" name="lastname" placeholder="">
+                </div>
+                <div class="cool-input">
+                    <input type="email" id="email-register" name="email" placeholder="">
+                    <label for="email" class="text">Email</label>
+                </div>
+                <div class="cool-input">
+                    <input type="password" id="password" name="password">
+                 
+                    <label for="password" class="text">Password</label>
+                </div>
+                <div class="cool-input">
+                    <input type="password" id="password-repeat" name="repeatpassword" placeholder="">
+                    <label for="repeatpassword" class="text">Repeat Password</label>
+                </div>
+                <div class="cool-select">
+                    <label for="birthYear">Birth year</label>
+                    <select id="birth-year" name="birthYear" class="select"></select>
+                </div>
 
-                <div class="radio-wrapper">
-                
-                <input type="radio" value="Male" name="gender" class="radio-button">
-                <label for="Male">Male</label>
-                <input type="radio" value="Female" name="gender" class="radio-button">
-                <label for="Female">Female</label>
-                <input type="radio" value="Other" name="gender" class="radio-button">
-                <label for="Other">Other</label>
+
+            <div class="container">
+                <div class="pane">
+                    <label class="label">
+                        <span>Female</span>
+                        <input id="left" class="input-gender" name="radio" type="radio">
+                    </label>
+                    <label class="label">
+                        <span>Male</span>
+                        <input id="middle" class="input-gender" checked="checked" name="radio" type="radio">
+                    </label>
+                    <label class="label">
+                        <span>Other</span>
+                        <input id="right" class="input-gender" name="radio" type="radio">
+                    </label>
+                    <span class="selection"></span>
+                </div>
             </div>
             
-                <p>Already have an account? <a id="login-link">Log in here</a></p>
+          
 
               </div>
               <div class="button-wrapper">
                 <button id="register-button">Register</button>
               </div>
+              <p>Already have an account? <a id="login-link">Log in here</a></p>
               </div>
             </div>
     </div>
