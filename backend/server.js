@@ -31,16 +31,6 @@ const firebaseConfig = {
 const fireBaseApp = initializeApp(firebaseConfig);
 
 
-//spotify API
-
-
-/*   var spotifyApi = new SpotifyWebApi({
-    clientId: 'f8f1713b777347b98ca3934762b892b9',
-    clientSecret: 'c1dfd3d453094ba19004b82174a9f9fe',
-    redirectUri: 'http://localhost:3000/callback'
-  });
- */
-
   app.get('/spotify-login', (req, res) => {
     const redirectUri = 'http://localhost:3000/callback'
     const scopes = [

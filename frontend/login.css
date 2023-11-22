@@ -8,7 +8,9 @@
   font-weight: bold;
 }
 
- 
+ a {
+  text-decoration: none;
+ }
 
 body {
   background: rgb(243, 243, 243);
@@ -53,6 +55,7 @@ input {
     border-radius: 5px;
     font-size: 1rem;
     background-color: rgb(243, 243, 243);
+    color: rgb(77, 43, 43);
 }
 
 input::placeholder{

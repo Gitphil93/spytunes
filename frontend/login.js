@@ -54,7 +54,7 @@ loginButton.addEventListener('click', () => {
 
  
 
-registerButton.addEventListener('click', () => {
+/* registerButton.addEventListener('click', () => {
     const credentials = {
         email: emailLogin.value,
         password: passwordLogin.value
@@ -62,4 +62,4 @@ registerButton.addEventListener('click', () => {
     console.log(credentials)
     createAccount(credentials)
     console.log(2)
-})
+}) */

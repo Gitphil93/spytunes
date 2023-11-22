@@ -53,7 +53,7 @@ async function createAccount (credentials) {
 
 
 registerButton.addEventListener('click', () => {
-    //kommenterar ut så länge då 
+    //kommenterar ut så länge 
 /*     if(firstName.value.length < 1){
         console.log("Please enter your first name")
         return false
@@ -94,6 +94,10 @@ registerButton.addEventListener('click', () => {
             return false
     }
     console.log(genderRadio.value)
+
+console.log("1" + 1)
+    const followers = null
+    const following = null
     const credentials = {
         firstName: firstName.value,
         lastName: lastName.value,
@@ -101,6 +105,8 @@ registerButton.addEventListener('click', () => {
         password: password.value,
         birthYear: birthYear.value,
         gender: genderRadio.value,
+        followers: followers,
+        following: following,
         
 
     }
