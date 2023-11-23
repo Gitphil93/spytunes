@@ -21,7 +21,7 @@ document.body.addEventListener('click', (event) => {
   }
 });
 
-profileButton.addEventListener('click', async (event) => {
+/* profileButton.addEventListener('click', async (event) => {
   event.stopPropagation();
 
   isActive = !isActive;
@@ -37,7 +37,7 @@ profileButton.addEventListener('click', async (event) => {
       menu.style.display = 'none';
     }, 30);
   }
-});
+}); */
 
 
 
