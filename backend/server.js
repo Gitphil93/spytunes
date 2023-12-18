@@ -8,27 +8,15 @@ import jwt from 'jsonwebtoken'
 import { getAccountByUsername, saveAccount, updateSongPos, getSongPos, getOtherUsersSongPos} from './database/operations.js'
 import { hashPassword, comparePassword } from './utils/bcrypt.js'
 const port = process.env.PORT || 3000;
-import { initializeApp } from 'firebase-admin/app';
+import { fireDb, saveAccount1 } from './database/firebase.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 
 app.use(express.json());
 app.use(express.static('../frontend'));
 
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAUK1tSNkygcYcV8w7ztn4CiNMhCKXMEBc",
-  authDomain: "spytunes-2bf4d.firebaseapp.com",
-  databaseURL: "https://spytunes-2bf4d-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "spytunes-2bf4d",
-  storageBucket: "spytunes-2bf4d.appspot.com",
-  messagingSenderId: "425165644340",
-  appId: "1:425165644340:web:dafd7b11c398df76432061"
-};
-
-const fireBaseApp = initializeApp(firebaseConfig);
 
 
   app.get('/spotify-login', (req, res) => {
@@ -185,10 +173,9 @@ app.post('/auth/register', async (request, response) => {
     const hashedPassword = await hashPassword(credentials.password);
     credentials.password = hashedPassword;
 
-    saveAccount(credentials);
-    console.log("Account created")
+    saveAccount1(credentials);
 
-    res.redirect('/auth');
+    //res.redirect('/auth');
 
   }
   response.json(resObj);

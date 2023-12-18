@@ -1,7 +1,7 @@
 
 const API_TOKEN = 'pk.eyJ1IjoibWFwLXBoaWwiLCJhIjoiY2xncDJma3RoMGF1ajNmc3V2NnhoZ21reCJ9.q61tna0GR6GFleO2otlW2g';
 const buttonElem = document.querySelector('#position-button');
-const profileButton = document.querySelector('.profile-container')
+const profileButton = document.querySelector('#profile-button')
 let profilePic = document.querySelector('#profile')
 //const logoutButton = document.querySelector('#logout-button')
 let menuProfilePic = document.querySelector('#profile-card-pic')
@@ -21,11 +21,12 @@ document.body.addEventListener('click', (event) => {
   }
 });
 
-/* profileButton.addEventListener('click', async (event) => {
+ profileButton.addEventListener('click', async (event) => {
   event.stopPropagation();
 
   isActive = !isActive;
-  if (isActive) {
+  window.location = "/profile"
+ /*  if (isActive) {
     setTimeout(() => {
       menu.style.display = 'block';
     }, 30);
@@ -36,8 +37,8 @@ document.body.addEventListener('click', (event) => {
     setTimeout(() => {
       menu.style.display = 'none';
     }, 30);
-  }
-}); */
+  } */
+}); 
 
 
 
@@ -71,8 +72,8 @@ function showOnMap(yourPosition, yourArtistData, yourPersonalData, otherSongPos)
 //Använder yourPersonalData så länge för att det ej finns i db
 function showMarker(map, position, artistData) {
   console.log("Artist data: ", artistData)
-  const el = document.createElement('div');
-  el.className = 'marker';
+  const popupElement = document.createElement('div');
+  popupElement.className = 'marker';
 
   const userPic = document.createElement('img');
   userPic.src = "./assets/headphones-icon.svg";
@@ -81,13 +82,13 @@ function showMarker(map, position, artistData) {
   userPic.style.borderRadius = "50%";
 
   const userName = document.createElement('h3');
-  userName.innerHTML = "User";
+  userName.innerHTML = "Philip Jansson";
 
-  new mapboxgl.Marker(el)
+  new mapboxgl.Marker(popupElement)
     .setLngLat([position.longitude, position.latitude])
     .setPopup(
       new mapboxgl.Popup({ offset: 25 })
-        .setHTML(`<h3>${userName.innerHTML}</h3>${userPic.outerHTML}<h3>Now playing: ${artistData.title} by ${artistData.artist}</h3>`)
+        .setHTML(`<h3>${userName.innerHTML}</h3>${userPic.outerHTML}<h3> ${artistData.title} by ${artistData.artist}</h3>`)
     )
     .addTo(map);
 }

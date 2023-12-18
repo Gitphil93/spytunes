@@ -1,7 +1,7 @@
 const displayName = document.querySelector('#name')
 const recentlyPlayed = document.querySelector('#recently-played')
 const profilePic = document.querySelector('#profile-picture')
-const mapButton = document.querySelector('#back-button')
+const mapButton = document.querySelector('#map-button')
 
 mapButton.addEventListener('click', () => {
     window.location.href = '/'

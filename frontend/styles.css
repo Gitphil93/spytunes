@@ -126,7 +126,7 @@ h1,h2,h3,h4,h5,p,a {
     margin-right: 2rem;
     height: auto;
     background-color: white;
-    z-index: 5;
+    z-index: 2;
     border-radius: 10px;
     box-shadow: 0 0 3rem rgba(0, 0, 0, 0.2);
     transition: transform 0.1s ease-in-out;
@@ -188,6 +188,9 @@ h1,h2,h3,h4,h5,p,a {
  .mapboxgl-ctrl-attrib-inner {
    display: none !important;
  }
+ .mapboxgl-popup-close-button{
+  display:none;
+ }
 
  .bottom-menu {
   position:absolute;
@@ -206,7 +209,7 @@ h1,h2,h3,h4,h5,p,a {
 
 
  .bottom-menu-buttons, button {
- border-radius: 5px;
+ border-radius: 2px;
  height: 2rem;
 border: none;
 
@@ -218,18 +221,20 @@ border: none;
   display: flex;
   left: 50%;
   top: -5px;
-  z-index: 2;
+  z-index: 5;
   width: 0;
   height: 0;
   border-left: 190px solid transparent;
   border-right: 190px solid transparent;
-  border-top: 70px solid rgb(243, 243, 243); /* Justera höjden beroende på önskad storlek */
+  border-top: 40px solid rgb(226, 226, 226); /* Justera höjden beroende på önskad storlek */
   transform: translateX(-50%);
+
 }
 
  #spytunes {
   position: absolute;
   left: 50%;
   top:0 ; 
-  transform: translate(-50%, -180%);
+  transform: translate(-50%, -160%);
+  font-size: 1.5rem;
 }

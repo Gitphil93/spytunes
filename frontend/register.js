@@ -54,7 +54,7 @@ async function createAccount (credentials) {
 
 registerButton.addEventListener('click', () => {
     //kommenterar ut så länge 
-/*     if(firstName.value.length < 1){
+    if(firstName.value.length < 1){
         console.log("Please enter your first name")
         return false
     }
@@ -74,10 +74,10 @@ registerButton.addEventListener('click', () => {
         return false
     }
 
-    if (password != passwordRepeat){
+    if (password.value != passwordRepeat.value){
         console.log("passwords doesn't match")
         return false
-    } */
+    } 
 
     let genderRadio;
     if (maleRadio.checked) {
@@ -95,9 +95,8 @@ registerButton.addEventListener('click', () => {
     }
     console.log(genderRadio.value)
 
-console.log("1" + 1)
-    const followers = null
-    const following = null
+    const followers = []
+    const following = []
     const credentials = {
         firstName: firstName.value,
         lastName: lastName.value,
@@ -111,10 +110,8 @@ console.log("1" + 1)
 
     }
     
-return false
     console.log(credentials)
     createAccount(credentials)
-    console.log(2)
 })
 
 
