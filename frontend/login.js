@@ -23,7 +23,6 @@ async function login(credentials){
     console.log(data);
 
     if (data.success) {
-        console.log(data.token)
         saveToken(data.token);
         window.location.href = 'spotify-login';
 
@@ -31,7 +30,6 @@ async function login(credentials){
 
  }
 
-  //sätt token
 
 function saveToken(token) {
     sessionStorage.setItem('token', token);

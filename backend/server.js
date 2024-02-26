@@ -5,10 +5,10 @@ import path from 'path'; // Import the path module
 const app = express()
 import SpotifyWebApi from 'spotify-web-api-node'
 import jwt from 'jsonwebtoken'
-import { getAccountByUsername, saveAccount, updateSongPos, getSongPos, getOtherUsersSongPos} from './database/operations.js'
+import { saveAccount } from './database/operations.js'
 import { hashPassword, comparePassword } from './utils/bcrypt.js'
 const port = process.env.PORT || 3000;
-import { fireDb, saveAccount1 } from './database/firebase.js';
+import { fireDb, saveAccount1, getAccountByEmail, updateSongPos, getSongPos, getOtherUsersSongPos } from './database/firebase.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -160,7 +160,7 @@ app.post('/auth/register', async (request, response) => {
     usernameExists: false
   }
 
-  const usernameExists = await getAccountByUsername(credentials.email);
+  const usernameExists = await getAccountByEmail(credentials.email);
   console.log(usernameExists)
 
 
@@ -200,7 +200,7 @@ app.get('/profile', (req, res) => {
 
 app.post('/auth/login', async (request, response) => {
   const credentials = request.body;
-  console.log(credentials);
+
 
   const resObj = {
     success: false,
@@ -208,20 +208,18 @@ app.post('/auth/login', async (request, response) => {
   };
 
   try {
-    const account = await getAccountByUsername(credentials.email);
-    console.log("Account Log", account);
-
-    if (account.length > 0) {
+    const account = await getAccountByEmail(credentials.email);
   
+    if (account) {
       resObj.success = true;
-  
-
-      const token = jwt.sign({ email: account[0].email }, 'a1b1c1', {
-        expiresIn: 1200 //hade 600 innan
+      const token = jwt.sign({ email: account.email }, 'a1b1c1', {
+          expiresIn: 1200 //hade 600 innan
       });
       console.log('token info', token)
 
       resObj.token = token;
+    } else {
+      console.log('Couldnt find account')
     }
   } catch (error) {
     console.error('Error during login:', error);
@@ -232,9 +230,11 @@ app.post('/auth/login', async (request, response) => {
 });
 
 app.post('/update-account', async (req, res) => {
+
   const songPos = req.body;
        // Extract user information from the token
        const token = req.headers.authorization.split(' ')[1];
+
        const decoded = jwt.verify(token, 'a1b1c1');
        const userEmail = decoded.email;
 

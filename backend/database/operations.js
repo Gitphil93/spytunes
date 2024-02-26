@@ -20,6 +20,8 @@ async function saveAccount(account) {
     console.log("Account added to database")
 }
 
+
+
 async function updateSongPos(userEmail, songPos) {
     try {
         await database.update({ email: userEmail }, { $set: {songPos} });

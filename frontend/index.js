@@ -96,6 +96,7 @@ function showMarker(map, position, artistData) {
   async function fetchData(url) {
     const token = sessionStorage.getItem('token');
 
+
     if (!token) {
         throw new Error('Token not available.');
     }
