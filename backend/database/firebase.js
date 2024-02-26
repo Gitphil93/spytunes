@@ -26,7 +26,7 @@ const firebaseConfig = {
       const snapshot = await get(q);
   
       // Ta det första (och förväntade enda) kontot från snapshot-objektet
-      const account = snapshot.exists() ? Object.values(snapshot.val())[0] : null;
+      const account = snapshot.exists() ? Object.values(snapshot.val())[0] : false;
 
       return account;
     } catch (error) {

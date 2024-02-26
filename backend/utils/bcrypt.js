@@ -12,6 +12,7 @@ async function hashPassword(password) {
 //jämför lösenordet mot if satsen i server.js. Exportera comparePassword nedan i module
 async function comparePassword(password, storedPassword) {
     const isTheSame = await bcrypt.compare(password, storedPassword);
+    console.log(isTheSame)
     return isTheSame;
 }
 

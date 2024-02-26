@@ -6,9 +6,11 @@ const app = express()
 import SpotifyWebApi from 'spotify-web-api-node'
 import jwt from 'jsonwebtoken'
 import { saveAccount } from './database/operations.js'
-import { hashPassword, comparePassword } from './utils/bcrypt.js'
+import { hashPassword, comparePassword } from './utils/bcrypt.js';
+
 const port = process.env.PORT || 3000;
 import { fireDb, saveAccount1, getAccountByEmail, updateSongPos, getSongPos, getOtherUsersSongPos } from './database/firebase.js';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -201,7 +203,6 @@ app.get('/profile', (req, res) => {
 app.post('/auth/login', async (request, response) => {
   const credentials = request.body;
 
-
   const resObj = {
     success: false,
     token: ''
@@ -209,17 +210,22 @@ app.post('/auth/login', async (request, response) => {
 
   try {
     const account = await getAccountByEmail(credentials.email);
-  
+    
     if (account) {
-      resObj.success = true;
-      const token = jwt.sign({ email: account.email }, 'a1b1c1', {
-          expiresIn: 1200 //hade 600 innan
-      });
-      console.log('token info', token)
+      const storedPassword = account.password; // Hämta sparade och hashade lösenordet från databasen
+      const isPasswordMatch = await comparePassword(credentials.password, storedPassword);
 
-      resObj.token = token;
+      if (isPasswordMatch) {
+        resObj.success = true;
+        const token = jwt.sign({ email: account.email }, 'a1b1c1', {
+            expiresIn: 1200
+        });
+        resObj.token = token;
+      } else {
+        console.log('Password does not match');
+      }
     } else {
-      console.log('Couldnt find account')
+      console.log('Could not find account');
     }
   } catch (error) {
     console.error('Error during login:', error);
