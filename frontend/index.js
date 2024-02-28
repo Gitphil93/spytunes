@@ -9,6 +9,8 @@ let menuProfileName = document.querySelector('#profile-card-name')
 const menu = document.querySelector('.popup-menu')
 
 let isActive = false
+const time = new Date()
+const timeStamp = time.getHours().toString().padStart(2,"0") + ":" + time.getMinutes().toString().padStart(2,"0")
 
 
 document.body.addEventListener('click', (event) => {
@@ -26,18 +28,6 @@ document.body.addEventListener('click', (event) => {
 
   isActive = !isActive;
   window.location = "/profile"
- /*  if (isActive) {
-    setTimeout(() => {
-      menu.style.display = 'block';
-    }, 30);
-
-    menu.style.transform = 'scale(1)';
-  } else {
-    menu.style.transform = 'scale(0.9)';
-    setTimeout(() => {
-      menu.style.display = 'none';
-    }, 30);
-  } */
 }); 
 
 
@@ -52,7 +42,7 @@ function showOnMap(yourPosition, yourArtistData, yourPersonalData, otherSongPos)
   });
 
   // Visa din position
-  showMarker(map, yourPosition, yourArtistData, yourPersonalData);
+  showMarker(map, yourPosition, yourArtistData, yourPersonalData, timeStamp);
 
   console.log(2, otherSongPos[0])
   if (Array.isArray(otherSongPos)) {
@@ -60,7 +50,7 @@ function showOnMap(yourPosition, yourArtistData, yourPersonalData, otherSongPos)
       if (user) {
         
 
-        showMarker(map, user.position, user.songData);//Använder yourPersonalData så länge för att det ej finns i db
+        showMarker(map, user.position, user.songData, timeStamp);
       } else {
         console.error('Ogiltig användardata:', user);
       }
@@ -69,8 +59,7 @@ function showOnMap(yourPosition, yourArtistData, yourPersonalData, otherSongPos)
 }
 
 
-//Använder yourPersonalData så länge för att det ej finns i db
-function showMarker(map, position, artistData) {
+function showMarker(map, position, artistData, timeStamp) {
   console.log("Artist data: ", artistData)
   const popupElement = document.createElement('div');
   popupElement.className = 'marker';
@@ -88,7 +77,7 @@ function showMarker(map, position, artistData) {
     .setLngLat([position.longitude, position.latitude])
     .setPopup(
       new mapboxgl.Popup({ offset: 25 })
-        .setHTML(`<h3>${userName.innerHTML}</h3>${userPic.outerHTML}<h3> ${artistData.title} by ${artistData.artist}</h3>`)
+        .setHTML(`<h3>${userName.innerHTML}</h3>${userPic.outerHTML}<h3>${artistData.title} by ${artistData.artist}</h3><h3>${timeStamp}</h3>`)
     )
     .addTo(map);
 }
@@ -164,7 +153,8 @@ async function getLocation() {
       artist: currentSong.artist,
       title: currentSong.title,
       longitude: position.longitude,
-      latitude: position.latitude
+      latitude: position.latitude,
+      time: timeStamp
   };
 
     if (token) {
@@ -244,8 +234,8 @@ async function getOtherSongPos() {
         const userPositions = result.map(user => {
           if (user) {
             const position = {
-              longitude: user.longitude+0.01,
-              latitude: user.latitude+0.01,
+              longitude: user.longitude,
+              latitude: user.latitude,
             };
             const songData = {
               artist: user.artist,

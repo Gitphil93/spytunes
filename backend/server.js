@@ -163,7 +163,7 @@ app.post('/auth/register', async (request, response) => {
   }
 
   const usernameExists = await getAccountByEmail(credentials.email);
-  console.log(usernameExists)
+
 
 
   if (usernameExists.length > 0) {
